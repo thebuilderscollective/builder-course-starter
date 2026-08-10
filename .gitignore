@@ -1,0 +1,17 @@
+# Copyright (c) 2026 The Builder Course and Rajat. All rights reserved.
+
+node_modules/
+.next/
+out/
+coverage/
+
+.env
+.env.local
+.env.*.local
+
+.railway/
+.vercel/
+
+.DS_Store
+*.log
+*.tsbuildinfo

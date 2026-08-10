@@ -1,0 +1,34 @@
+{
+  "name": "builder-course-starter",
+  "copyright": "Copyright (c) 2026 The Builder Course and Rajat. All rights reserved.",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "setup": "node --experimental-strip-types scripts/setup.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build",
+    "deploy:railway": "node --experimental-strip-types --env-file-if-exists=.env.local scripts/deploy-railway.ts"
+  },
+  "dependencies": {
+    "next": "16.3.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "25.9.3",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.10",
+    "typescript": "6.0.3"
+  }
+}
