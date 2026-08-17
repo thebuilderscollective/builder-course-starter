@@ -1,6 +1,7 @@
 // Copyright (c) 2026 The Builder Course and Rajat. All rights reserved.
 
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { getSetupReport } from "../lib/setup/checks.ts";
 import {
@@ -8,6 +9,7 @@ import {
   getConfigurationChecks,
   getMissingEnvironmentNames,
 } from "../lib/setup/environment.ts";
+import { getRailwayStdio } from "../lib/setup/railway-process.ts";
 
 const completeEnvironment = {
   SUPABASE_URL: "https://course-example.supabase.co",
@@ -81,4 +83,30 @@ test("failed services return general guidance without exposing private values", 
   assert.equal(serialized.includes("telegram-test-value"), false);
   assert.equal(serialized.includes("openai-test-value"), false);
   assert.equal(serialized.includes("secret-test-value"), false);
+});
+
+test("Railway receives private values through stdin without losing interactive input", () => {
+  assert.deepEqual(getRailwayStdio({}), ["inherit", "inherit", "inherit"]);
+  assert.deepEqual(getRailwayStdio({ capture: true }), ["pipe", "pipe", "pipe"]);
+  assert.deepEqual(getRailwayStdio({ input: "private-test-value" }), [
+    "pipe",
+    "inherit",
+    "inherit",
+  ]);
+
+  const privateValue = "private-test-value";
+  const child = spawnSync(
+    process.execPath,
+    [
+      "--input-type=module",
+      "--eval",
+      'let value = ""; process.stdin.setEncoding("utf8"); for await (const chunk of process.stdin) value += chunk; process.exit(value === "private-test-value" ? 0 : 1);',
+    ],
+    {
+      input: privateValue,
+      stdio: getRailwayStdio({ input: privateValue }),
+    },
+  );
+
+  assert.equal(child.status, 0);
 });

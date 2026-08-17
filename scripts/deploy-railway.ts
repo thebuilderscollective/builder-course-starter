@@ -2,6 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import { getMissingEnvironmentNames, environmentDefinitions } from "../lib/setup/environment.ts";
+import { getRailwayStdio, type RailwayProcessOptions } from "../lib/setup/railway-process.ts";
 
 const railwayPackage = "@railway/cli@5.28.1";
 const npxCommand = process.platform === "win32" ? "npx.cmd" : "npx";
@@ -14,13 +15,13 @@ function stop(message: string): never {
 
 function railway(
   argumentsForRailway: string[],
-  options: { input?: string; capture?: boolean; allowFailure?: boolean } = {},
+  options: RailwayProcessOptions & { allowFailure?: boolean } = {},
 ): string {
   const result = spawnSync(npxCommand, [...baseArguments, ...argumentsForRailway], {
     cwd: process.cwd(),
     encoding: "utf8",
     input: options.input,
-    stdio: options.capture ? ["pipe", "pipe", "pipe"] : ["inherit", "inherit", "inherit"],
+    stdio: getRailwayStdio(options),
   });
 
   if (result.error || result.status !== 0) {
