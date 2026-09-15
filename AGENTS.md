@@ -4,7 +4,7 @@
 
 ## Project
 
-This repository is only a pre-work setup checker for The Builder Course Cohort 2.
+This repository is only a pre-work setup checker for The Builder Course.
 Do not add course-product features, authentication, database writes, Telegram
 messages, Gmail or Calendar access, or OpenAI generation.
 

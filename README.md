@@ -2,7 +2,7 @@
 
 # Builder Course starter
 
-This is the Cohort 2 setup checker. It has one job: prove that your local tools,
+This is The Builder Course setup checker. It has one job: prove that your local tools,
 five private configuration values, and Railway deployment work together.
 
 It is deliberately not a course application. It does not read database rows,

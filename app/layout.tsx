@@ -2,11 +2,12 @@
 
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { setupCheckerBranding } from "@/lib/setup/branding";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Cohort 2 setup checker | The Builder Course",
-  description: "A private, setup-only readiness check for Builder Course Cohort 2.",
+  title: setupCheckerBranding.metadataTitle,
+  description: setupCheckerBranding.metadataDescription,
   robots: { index: false, follow: false },
 };
 

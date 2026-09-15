@@ -12,7 +12,7 @@ web
 
 ## Users
 
-Cohort 2 participants preparing for Build Day 1. Many are new to engineering
+Builder Course participants preparing for Build Day 1. Many are new to engineering
 literacy and need each setup result explained in plain language without being
 asked to understand the application internals.
 
