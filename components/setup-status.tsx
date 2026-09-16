@@ -6,6 +6,7 @@ import type {
   SetupReport,
 } from "@/lib/setup/checks";
 import type { ConfigurationCheck } from "@/lib/setup/environment";
+import { setupCheckerBranding } from "@/lib/setup/branding";
 
 type DisplayState = ConfigurationCheck["state"] | ConnectionState;
 
@@ -54,7 +55,7 @@ export function SetupStatus({ report }: { report: SetupReport }) {
           <span className="brand-mark" aria-hidden="true">B</span>
           <span>
             <strong>The Builder Course</strong>
-            <small>Cohort 2 setup checker</small>
+            <small>{setupCheckerBranding.shortLabel}</small>
           </span>
         </div>
         <span className="scope-label">Setup only</span>

@@ -19,6 +19,20 @@ const completeEnvironment = {
   OPENAI_API_KEY: "openai-test-value",
 };
 
+test("setup checker branding is reusable across cohorts", async () => {
+  const brandingModule = await import("../lib/setup/branding.ts").catch(() => null);
+
+  assert.ok(brandingModule, "expected shared setup-checker branding");
+  assert.equal(
+    /cohort\s*\d/i.test(JSON.stringify(brandingModule.setupCheckerBranding)),
+    false,
+  );
+  assert.equal(
+    brandingModule.setupCheckerBranding.shortLabel,
+    "Builder Course setup checker",
+  );
+});
+
 test("the environment template has exactly the five course values", () => {
   assert.deepEqual(
     environmentDefinitions.map((definition) => definition.name),
