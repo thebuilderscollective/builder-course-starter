@@ -87,6 +87,56 @@ test("complete values and successful read-only requests produce a ready report",
   assert.equal(JSON.stringify(report).includes("test-value"), false);
 });
 
+test("Supabase checks the public auth settings endpoint with the apikey header", async () => {
+  const requests: Array<{ input: string; init?: RequestInit }> = [];
+  const fetcher: typeof fetch = async (input, init) => {
+    requests.push({ input: String(input), init });
+    return new Response(null, { status: 200 });
+  };
+
+  await getSetupReport(completeEnvironment, fetcher);
+
+  const supabaseRequest = requests.find((request) =>
+    request.input.includes("course-example.supabase.co"),
+  );
+  assert.ok(supabaseRequest);
+  assert.equal(
+    supabaseRequest.input,
+    "https://course-example.supabase.co/auth/v1/settings",
+  );
+  assert.deepEqual(supabaseRequest.init?.headers, {
+    apikey: "publishable-test-value",
+  });
+});
+
+test("Supabase rejects a project URL containing an API path", async () => {
+  const requestedUrls: string[] = [];
+  const fetcher: typeof fetch = async (input) => {
+    requestedUrls.push(String(input));
+    return new Response(null, { status: 200 });
+  };
+
+  const report = await getSetupReport(
+    {
+      ...completeEnvironment,
+      SUPABASE_URL: "https://course-example.supabase.co/rest/v1",
+    },
+    fetcher,
+  );
+  const supabase = report.connections.find((check) => check.id === "supabase");
+
+  assert.ok(supabase);
+  assert.equal(supabase.state, "failed");
+  assert.equal(
+    supabase.detail,
+    "Use the project URL only, such as https://PROJECT-REF.supabase.co. Do not add /rest/v1.",
+  );
+  assert.equal(
+    requestedUrls.some((url) => url.includes("course-example.supabase.co")),
+    false,
+  );
+});
+
 test("failed services return general guidance without exposing private values", async () => {
   const fetcher: typeof fetch = async () => new Response(null, { status: 401 });
   const report = await getSetupReport(completeEnvironment, fetcher);

@@ -9,7 +9,7 @@ export const environmentDefinitions = [
   {
     name: "SUPABASE_PUBLISHABLE_KEY",
     label: "Supabase publishable key",
-    help: "Allows the safe, read-only Supabase connection check.",
+    help: "Lets the checker confirm the project URL and publishable key.",
   },
   {
     name: "SUPABASE_SECRET_KEY",

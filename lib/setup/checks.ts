@@ -37,7 +37,13 @@ function hasAll(
 function isSupabaseProjectUrl(value: string): boolean {
   try {
     const url = new URL(value);
-    return url.protocol === "https:" && url.hostname.endsWith(".supabase.co");
+    return (
+      url.protocol === "https:" &&
+      url.hostname.endsWith(".supabase.co") &&
+      url.pathname === "/" &&
+      url.search === "" &&
+      url.hash === ""
+    );
   } catch {
     return false;
   }
@@ -93,25 +99,27 @@ async function checkSupabase(
       id: "supabase",
       label: "Supabase",
       state: "failed",
-      detail: "The project URL does not look like a Supabase project URL.",
+      detail:
+        "Use the project URL only, such as https://PROJECT-REF.supabase.co. Do not add /rest/v1.",
     };
   }
 
-  const connected = await requestSucceeded(fetcher, `${projectUrl}/rest/v1/`, {
-    method: "GET",
-    headers: {
-      apikey: publishableKey,
-      Authorization: `Bearer ${publishableKey}`,
+  const connected = await requestSucceeded(
+    fetcher,
+    `${projectUrl}/auth/v1/settings`,
+    {
+      method: "GET",
+      headers: { apikey: publishableKey },
     },
-  });
+  );
 
   return {
     id: "supabase",
     label: "Supabase",
     state: connected ? "connected" : "failed",
     detail: connected
-      ? "The project accepted a read-only API request."
-      : "The project did not accept the read-only check. Recheck its URL and publishable key.",
+      ? "Supabase accepted the project URL and publishable key."
+      : "Supabase did not accept the project URL and publishable key. Recheck both values.",
   };
 }
 

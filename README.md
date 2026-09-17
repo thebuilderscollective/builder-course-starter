@@ -11,7 +11,7 @@ send Telegram messages, read Gmail or Calendar, or create an OpenAI response.
 ## What the checker verifies
 
 - All five required names have values without displaying those values.
-- Supabase accepts a read-only request using the project URL and publishable key.
+- Supabase accepts the project URL and publishable key through its public Auth settings endpoint.
 - Telegram recognizes the bot token through the read-only `getMe` endpoint.
 - OpenAI accepts the API key through the read-only models endpoint.
 - Gmail API and Google Calendar API remain a manual confirmation because OAuth
